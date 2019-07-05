@@ -42,4 +42,4 @@ module PersonalSite
   end
 end
 
-SITE_NAME = '毕帅的技术站点'
+SITE_NAME = '周运宝的技术站点'
