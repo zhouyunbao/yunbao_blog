@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<%= render '/refinery/html_tag' %>
+  <% site_bar = render('/refinery/site_bar', :head => true) -%>
+  <%= render '/refinery/head' %>
+  <style>
+  html{
+      min-height:100%;
+      background-size:cover;
+  }
+  body{
+      /* Workaround for some mobile browsers */
+      min-height:100%;
+  }
+  </style>
+  <%= render '/refinery/javascripts' unless is_from_mobile %>
+  <head>
+  <title>欢迎毕帅的站点</title>
+  </head>
+  <body>
+    <%= site_bar -%>
+    <%= render '/refinery/ie6check' if request.env['HTTP_USER_AGENT'] =~ /MSIE/ -%>
+    <div id="page_container">
+
+      <header id="header" class='art-header clearfix'>
+        <div style='background: url(<%= asset_path("template/header.png")%>) no-repeat center center; height: 134px;background-size:100%'>
+        </div>
+      <%# image_tag asset_path("template/header.png"), :style=> 'width: 100%' %>
+        <nav class="art-nav clearfix desktop-nav " style='position:relative'>
+        <div class="art-nav-inner">
+          <ul class="art-hmenu">
+            <% Refinery::Page.where('show_in_menu = 1').each do |page|
+              page_url = refinery.url_for(page.url)
+              css_class = page_url.match(/blog/) ?  '' : '' %>
+              <li><%= link_to page.title, page_url, :class => css_class -%></li>
+            <% end %>
+          </ul>
+        </div>
+        </nav>
+      </header>
+      <section id="page" class='art-postcontent' style='clear: both; margin-top: 20px'>
+        <%= yield %>
+      </section>
+      <footer class="art-footer clearfix">
+      <div class="art-footer-inner">
+        <div style="position:relative;display:inline-block;padding-left:35px;padding-right:35px">
+          <p>所有文章都欢迎转载, 注明出处即可.</p>
+          <p>总访问量: <%= Refinery::Blog::Post.sum(:access_count) %></p>
+          <p>Copyright © 2019-now. 毕帅的个人站点/ Bishuai's Site.</p><br></div>
+       </div>
+       </footer>
+    </div>
+  </body>
+  <script>
+  $('pre').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+  </script>
+</html>
